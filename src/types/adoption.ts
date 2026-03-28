@@ -5,6 +5,7 @@ export type AdoptionStatus =
   | "DISPUTED"
   | "FUNDS_RELEASED"
   | "CUSTODY_ACTIVE"
+  | "EXPIRING_SOON"
   | "COMPLETED"
   | "CANCELLED";
 
