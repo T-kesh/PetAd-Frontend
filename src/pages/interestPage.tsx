@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { adoptionService } from "../api/adoptionService";
-import { FormSelect } from "../components/ui/formSelect";
 import { InterestPetCard, type Pet } from "../components/ui/InterestPetCard";
 import { RatingModal } from "../components/ui/RatingModal";
 
@@ -51,12 +50,7 @@ const MOCK_PETS: Pet[] = [
   },
 ];
 
-const CATEGORY_OPTIONS = [
-  { value: "all", label: "Category: All" },
-  { value: "dog", label: "Dog" },
-  { value: "cat", label: "Cat" },
-  { value: "bird", label: "Bird" },
-];
+
 
 export default function InterestPage() {
   const [pets, setPets] = useState<Pet[]>(MOCK_PETS);
@@ -254,6 +248,7 @@ export default function InterestPage() {
             <h3 className="text-xl font-bold text-gray-900 mb-2">
               No interests found
             </h3>
+           
             <p className="text-gray-500 max-w-[300px]">
               {pets.filter((p) => p.isInterested).length > 0
                 ? "No pets match your current filter criteria. Try resetting the filters."

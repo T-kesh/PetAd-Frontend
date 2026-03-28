@@ -8,6 +8,7 @@ interface FormSelectProps {
     placeholder?: string;
     className?: string;
     value?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onChange?: (e: any) => void;
 }
 

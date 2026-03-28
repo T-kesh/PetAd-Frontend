@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import { useState, type ChangeEvent, } from "react";
 import { Upload } from "lucide-react";
 export default function EditAdoptionListing() {
   const [isLoading, setIsLoading] = useState(false);
@@ -240,6 +240,7 @@ export default function EditAdoptionListing() {
 }
 
 // Internal Helpers
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const InputField = ({ label, name, value, onChange, error }: any) => (
   <div className="flex flex-col">
     <label className="text-[11px] font-bold text-gray-400 uppercase mb-2">
@@ -253,7 +254,7 @@ const InputField = ({ label, name, value, onChange, error }: any) => (
     />
   </div>
 );
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const SelectField = ({ label, name, value, options, onChange }: any) => (
   <div className="flex flex-col">
     <label className="text-[11px] font-bold text-gray-400 uppercase mb-2">
