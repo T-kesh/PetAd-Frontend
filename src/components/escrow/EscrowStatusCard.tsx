@@ -17,12 +17,15 @@ export function EscrowStatusCard({
   fetchStatus,
   pollingIntervalMs = 1000,
 }: EscrowStatusCardProps) {
-  const query = fetchStatus
-    ? usePolling(["escrow-status", escrowId], fetchStatus, {
-        intervalMs: pollingIntervalMs,
-        stopWhen: (data) => data?.status === "SETTLED",
-      })
-    : null;
+  const query = usePolling(
+    ["escrow-status", escrowId],
+    fetchStatus ?? (() => Promise.resolve(undefined as unknown as EscrowStatusData)),
+    {
+      intervalMs: pollingIntervalMs,
+      stopWhen: (data) => data?.status === "SETTLED",
+      enabled: !!fetchStatus,
+    },
+  );
 
   const isLoading = query ? query.isLoading && !query.data && !initialData : false;
   const data = (query?.data ?? initialData) || null;

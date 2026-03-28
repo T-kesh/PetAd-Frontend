@@ -17,8 +17,7 @@ export const escrowService = {
       headers: { "Content-Type": "application/json" },
     });
     if (!response.ok) {
-      const error = new Error("Failed to retry settlement") as any;
-      error.status = response.status;
+      const error = Object.assign(new Error("Failed to retry settlement"), { status: response.status });
       throw error;
     }
   },
@@ -30,8 +29,7 @@ export const escrowService = {
   async getSettlementSummary(escrowId: string): Promise<SettlementSummary> {
     const response = await fetch(`/api/escrow/${escrowId}/settlement-summary`);
     if (!response.ok) {
-        const error = new Error("Failed to fetch settlement summary") as any;
-        error.status = response.status;
+        const error = Object.assign(new Error("Failed to fetch settlement summary"), { status: response.status });
         throw error;
     }
     return response.json();

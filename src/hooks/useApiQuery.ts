@@ -18,7 +18,7 @@ interface UseApiQueryReturn<T> {
  * - 404 Not Found: Returns isNotFound: true
  */
 export function useApiQuery<T>(
-  key: any[],
+  key: readonly unknown[],
   fetchFn: () => Promise<T>,
   options?: Omit<UseQueryOptions<T, ApiError>, 'queryKey' | 'queryFn'>
 ): UseApiQueryReturn<T> {

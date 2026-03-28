@@ -76,12 +76,12 @@ describe('notificationRouter', () => {
   });
 
   it('should return default route for unknown type', () => {
-    const notification: any = {
+    const notification = {
       id: '7',
       type: 'UNKNOWN_TYPE',
       message: 'Test message',
       time: 'now'
-    };
+    } as unknown as import('../../types/notifications').Notification;
     expect(notificationRouter(notification)).toBe('/notifications');
   });
 });

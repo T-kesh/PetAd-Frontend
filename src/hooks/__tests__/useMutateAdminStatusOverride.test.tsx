@@ -17,7 +17,7 @@ export function createWrapper() {
     React.createElement(QueryClientProvider, { client: queryClient }, children);
  
   // Stash the client so renderHook callers can access it
-  (Wrapper as any).__queryClient = queryClient;
+  (Wrapper as unknown as { __queryClient: QueryClient }).__queryClient = queryClient;
  
   return Wrapper;
 }
@@ -31,7 +31,7 @@ export function renderHook<TProps, TResult>(
   options: RenderHookOptions<TProps> & { wrapper?: ReturnType<typeof createWrapper> },
 ) {
   const base = baseRenderHook(callback, options);
-  const queryClient: QueryClient | undefined = (options.wrapper as any)?.__queryClient;
+  const queryClient: QueryClient | undefined = (options.wrapper as unknown as { __queryClient?: QueryClient })?.__queryClient;
   return { ...base, queryClient: queryClient! };
 }
 

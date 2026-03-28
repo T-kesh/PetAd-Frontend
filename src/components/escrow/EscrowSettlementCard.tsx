@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useEscrowStatus } from "../../lib/hooks/useEscrowStatus";
 import { EscrowStatusBadge } from "./EscrowStatusBadge";
 import { Skeleton } from "../ui/Skeleton";
@@ -10,27 +10,30 @@ interface EscrowSettlementCardProps {
 
 export function EscrowSettlementCard({ escrowId }: EscrowSettlementCardProps) {
   const { data, isLoading, isError, refetch } = useEscrowStatus(escrowId);
-  const [lastUpdated, setLastUpdated] = useState<number>(Date.now());
+  const lastUpdatedRef = useRef<number>(0);
   const [secondsAgo, setSecondsAgo] = useState<number>(0);
 
-  // Update lastUpdated when data changes
+  // Set initial lastUpdated on mount
+  useEffect(() => {
+    lastUpdatedRef.current = Date.now();
+  }, []);
+
+  // Track when data last changed via a ref (no re-render needed)
   useEffect(() => {
     if (data) {
-      setLastUpdated(Date.now());
+      lastUpdatedRef.current = Date.now();
     }
   }, [data]);
 
-  // Update secondsAgo every 10 seconds
+  // Tick every 10 seconds — setState only inside the timer callback
   useEffect(() => {
-    const interval = setInterval(() => {
-      setSecondsAgo(Math.floor((Date.now() - lastUpdated) / 1000));
-    }, 10000);
+    const tick = () => {
+      setSecondsAgo(Math.floor((Date.now() - lastUpdatedRef.current) / 1000));
+    };
 
-    // Also update immediately when lastUpdated changes
-    setSecondsAgo(Math.floor((Date.now() - lastUpdated) / 1000));
-
+    const interval = setInterval(tick, 10000);
     return () => clearInterval(interval);
-  }, [lastUpdated]);
+  }, []);
 
   if (isLoading && !data) {
     return (
@@ -73,7 +76,7 @@ export function EscrowSettlementCard({ escrowId }: EscrowSettlementCardProps) {
     );
   }
 
-  const balance = (data as any)?.balance || "0";
+  const balance = (data as Record<string, unknown>)?.balance ?? "0";
 
   return (
     <div className="group relative w-full max-w-md overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 shadow-xl transition-all duration-500 hover:shadow-2xl">
@@ -85,7 +88,7 @@ export function EscrowSettlementCard({ escrowId }: EscrowSettlementCardProps) {
           <span className="text-xs font-bold uppercase tracking-widest text-slate-400">
             Escrow State
           </span>
-          <EscrowStatusBadge status={(data?.status as any) || "AWAITING_FUNDS"} />
+          <EscrowStatusBadge status={((data?.status as string) || "AWAITING_FUNDS") as import("./types").EscrowStatus} />
         </div>
 
         <div className="mt-8">
