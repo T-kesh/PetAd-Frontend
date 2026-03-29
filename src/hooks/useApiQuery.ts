@@ -1,5 +1,6 @@
-import { useQuery, UseQueryOptions } from "@tanstack/react-query";
-import { ApiError } from "../types/auth";
+import { useQuery } from "@tanstack/react-query";
+import type { UseQueryOptions } from "@tanstack/react-query";
+import type { ApiError } from "../types/auth";
 
 interface UseApiQueryReturn<T> {
   data: T | undefined;
