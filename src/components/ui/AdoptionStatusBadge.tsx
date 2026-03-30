@@ -40,6 +40,18 @@ const STATUS_CONFIG: Record<string, {
     bgClass: 'bg-green-100',
     tooltip: 'Funds have been released successfully.',
   },
+  COMPLETED: {
+    label: 'Completed',
+    textClass: 'text-emerald-700',
+    bgClass: 'bg-emerald-100',
+    tooltip: 'The adoption lifecycle has been completed.',
+  },
+  CANCELLED: {
+    label: 'Cancelled',
+    textClass: 'text-slate-700',
+    bgClass: 'bg-slate-100',
+    tooltip: 'The adoption was cancelled before completion.',
+  },
   DISPUTED: {
     label: 'Disputed',
     textClass: 'text-red-700',

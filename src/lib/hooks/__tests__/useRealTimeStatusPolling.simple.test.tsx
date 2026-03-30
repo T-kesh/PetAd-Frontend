@@ -55,6 +55,7 @@ describe("useRealTimeStatusPolling - Simple Tests", () => {
 
     expect(mockGetDetails).toHaveBeenCalledWith("adoption-1");
     expect(mockGetDetails).toHaveBeenCalledTimes(1);
+    expect(result.current.statusChanged).toBe(false);
   });
 
   it("should throw error for invalid entity type", () => {

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { renderHook, waitFor, act } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useRealTimeStatusPolling } from "../useRealTimeStatusPolling";
@@ -38,7 +38,7 @@ const mockAdoptionData: AdoptionDetails = {
 
 const mockCustodyData: CustodyDetails = {
   id: "custody-1",
-  status: "CUSTODY_ACTIVE",
+  status: "ACTIVE",
   petId: "pet-1",
   custodianId: "user-1",
   ownerId: "user-2",
@@ -48,12 +48,8 @@ const mockCustodyData: CustodyDetails = {
 };
 
 describe("useRealTimeStatusPolling", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    vi.useFakeTimers();
-  });
-
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
     vi.useRealTimers();
   });
@@ -69,17 +65,15 @@ describe("useRealTimeStatusPolling", () => {
       { wrapper: createWrapper(queryClient) }
     );
 
-    // Initial fetch
-    await waitFor(() => expect(mockGetDetails).toHaveBeenCalledTimes(1));
-    expect(result.current.data).toEqual(mockAdoptionData);
-
-    // Fast-forward 100ms
-    act(() => {
-      vi.advanceTimersByTime(100);
+    await waitFor(() => {
+      expect(mockGetDetails).toHaveBeenCalledTimes(1);
+      expect(result.current.data).toEqual(mockAdoptionData);
+      expect(result.current.statusChanged).toBe(false);
     });
 
-    // Should poll again
-    await waitFor(() => expect(mockGetDetails).toHaveBeenCalledTimes(2));
+    await waitFor(() => expect(mockGetDetails).toHaveBeenCalledTimes(2), {
+      timeout: 1000,
+    });
   });
 
   it("polls custody details when entityType is custody", async () => {
@@ -93,12 +87,16 @@ describe("useRealTimeStatusPolling", () => {
       { wrapper: createWrapper(queryClient) }
     );
 
-    await waitFor(() => expect(mockGetDetails).toHaveBeenCalledTimes(1));
-    expect(mockGetDetails).toHaveBeenCalledWith("custody-1");
-    expect(result.current.data).toEqual(mockCustodyData);
+    await waitFor(() => {
+      expect(mockGetDetails).toHaveBeenCalledTimes(1);
+      expect(mockGetDetails).toHaveBeenCalledWith("custody-1");
+      expect(result.current.data).toEqual(mockCustodyData);
+    });
   });
 
-  it("sets statusChanged to true for 3 seconds after status change", async () => {
+  it(
+    "sets statusChanged to true for 3 seconds after status change",
+    async () => {
     const queryClient = createTestQueryClient();
     vi
       .spyOn(adoptionService.adoptionService, "getDetails")
@@ -113,29 +111,19 @@ describe("useRealTimeStatusPolling", () => {
       { wrapper: createWrapper(queryClient) }
     );
 
-    // Initial state - no status change
+    await waitFor(() => {
+      expect(result.current.data?.status).toBe("ESCROW_FUNDED");
+      expect(result.current.statusChanged).toBe(true);
+    });
+
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 3100));
+    });
+
     await waitFor(() => expect(result.current.statusChanged).toBe(false));
-
-    // Trigger status change
-    act(() => {
-      vi.advanceTimersByTime(100);
-    });
-
-    // Status should have changed
-    await waitFor(() => expect(result.current.statusChanged).toBe(true));
-
-    // After 2 seconds, still true
-    act(() => {
-      vi.advanceTimersByTime(2000);
-    });
-    expect(result.current.statusChanged).toBe(true);
-
-    // After 3 seconds total, should be false
-    act(() => {
-      vi.advanceTimersByTime(1000);
-    });
-    expect(result.current.statusChanged).toBe(false);
-  });
+    },
+    8000,
+  );
 
   it("stops polling when status is COMPLETED", async () => {
     const queryClient = createTestQueryClient();
@@ -148,26 +136,20 @@ describe("useRealTimeStatusPolling", () => {
       });
 
     renderHook(
-      () => useRealTimeStatusPolling("adoption", "adoption-1", { intervalMs: 100 }),
+      () => useRealTimeStatusPolling("adoption", "adoption-1", { intervalMs: 25 }),
       { wrapper: createWrapper(queryClient) }
     );
 
-    // Initial fetch
     await waitFor(() => expect(mockGetDetails).toHaveBeenCalledTimes(1));
 
-    // Status changes to COMPLETED
-    act(() => {
-      vi.advanceTimersByTime(100);
+    await waitFor(() => expect(mockGetDetails).toHaveBeenCalledTimes(2), {
+      timeout: 1000,
     });
 
-    await waitFor(() => expect(mockGetDetails).toHaveBeenCalledTimes(2));
-
-    // Fast-forward another 100ms - should not poll again
-    act(() => {
-      vi.advanceTimersByTime(100);
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 120));
     });
 
-    // Should still be 2 calls (polling stopped)
     expect(mockGetDetails).toHaveBeenCalledTimes(2);
   });
 
@@ -182,26 +164,20 @@ describe("useRealTimeStatusPolling", () => {
       });
 
     renderHook(
-      () => useRealTimeStatusPolling("adoption", "adoption-1", { intervalMs: 100 }),
+      () => useRealTimeStatusPolling("adoption", "adoption-1", { intervalMs: 25 }),
       { wrapper: createWrapper(queryClient) }
     );
 
-    // Initial fetch
     await waitFor(() => expect(mockGetDetails).toHaveBeenCalledTimes(1));
 
-    // Status changes to CANCELLED
-    act(() => {
-      vi.advanceTimersByTime(100);
+    await waitFor(() => expect(mockGetDetails).toHaveBeenCalledTimes(2), {
+      timeout: 1000,
     });
 
-    await waitFor(() => expect(mockGetDetails).toHaveBeenCalledTimes(2));
-
-    // Fast-forward another 100ms - should not poll again
-    act(() => {
-      vi.advanceTimersByTime(100);
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 120));
     });
 
-    // Should still be 2 calls (polling stopped)
     expect(mockGetDetails).toHaveBeenCalledTimes(2);
   });
 

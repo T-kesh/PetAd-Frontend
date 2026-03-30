@@ -18,6 +18,7 @@ import { SettlementSummaryPage } from "./pages/SettlementSummaryPage";
 import AdoptionTimelinePage from "./pages/AdoptionTimelinePage";
 import ModalPreview from "./pages/ModalPreview";
 import StatusPollingDemo from "./pages/StatusPollingDemo";
+import CustodyTimelinePage from "./pages/CustodyTimelinePage";
 
 function App() {
 
@@ -30,7 +31,6 @@ function App() {
       <Route path="/reset" element={<ResetPasswordPage />} />
       <Route path="/forgot-password" element={<ForgetPasswordPage />} />
 
-      {/* Main App Routes - With Navbar/Footer */}
       <Route element={<MainLayout />}>
         <Route path="/home" element={<HomePage />} />
         <Route path="/profile" element={<ProfilePage />} />
@@ -44,7 +44,8 @@ function App() {
         <Route path="/adoption/:adoptionId/settlement" element={<SettlementSummaryPage />} />
         <Route path="/adoption/:adoptionId/timeline" element={<AdoptionTimelinePage />} />
 
-        {/* Preview Routes */}
+        <Route path="/custody/:custodyId/timeline" element={<CustodyTimelinePage />} />
+
         <Route path="/preview-modal" element={<ModalPreview />} />
         <Route path="/adoption-completion-demo" element={<AdoptionCompletionDemo />} />
         <Route path="/status-polling-demo" element={<StatusPollingDemo />} />

@@ -8,6 +8,8 @@ const cases = [
   { status: 'SETTLEMENT_TRIGGERED', label: 'Settlement Triggered', textClass: 'text-amber-700' },
   { status: 'CUSTODY_ACTIVE', label: 'Custody Active', textClass: 'text-green-700' },
   { status: 'FUNDS_RELEASED', label: 'Funds Released', textClass: 'text-green-700' },
+  { status: 'COMPLETED', label: 'Completed', textClass: 'text-emerald-700' },
+  { status: 'CANCELLED', label: 'Cancelled', textClass: 'text-slate-700' },
   { status: 'DISPUTED', label: 'Disputed', textClass: 'text-red-700' },
 ]
 

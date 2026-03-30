@@ -1,5 +1,51 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`AdoptionStatusBadge > renders 'CANCELLED' correctly 1`] = `
+<div>
+  <div
+    class="relative group inline-block"
+  >
+    <span
+      class="px-2 py-1 text-xs font-medium rounded-full text-slate-700 bg-slate-100"
+    >
+      Cancelled
+    </span>
+    <div
+      class="absolute left-1/2 -translate-x-1/2 mt-1 hidden group-hover:block"
+    >
+      <div
+        class="rounded-md bg-black text-white text-xs px-2 py-1"
+      >
+        The adoption was cancelled before completion.
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`AdoptionStatusBadge > renders 'COMPLETED' correctly 1`] = `
+<div>
+  <div
+    class="relative group inline-block"
+  >
+    <span
+      class="px-2 py-1 text-xs font-medium rounded-full text-emerald-700 bg-emerald-100"
+    >
+      Completed
+    </span>
+    <div
+      class="absolute left-1/2 -translate-x-1/2 mt-1 hidden group-hover:block"
+    >
+      <div
+        class="rounded-md bg-black text-white text-xs px-2 py-1"
+      >
+        The adoption lifecycle has been completed.
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`AdoptionStatusBadge > renders 'CUSTODY_ACTIVE' correctly 1`] = `
 <div>
   <div
