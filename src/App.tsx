@@ -44,7 +44,6 @@ function App() {
         <Route path="/my-listings/:id" element={<ListingDetailsPage />} />
         <Route path="/notifications" element={<NotificationPage />} />
         <Route
-<Route
           path="/notification-preferences"
           element={<NotificationPreferencesPage />}
         />

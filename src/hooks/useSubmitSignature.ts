@@ -13,7 +13,6 @@ export function useSubmitSignature() {
   const [isPending, setIsPending] = useState(false);
 
   const mutateSubmitSignature = async (
-    /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
     payload: SubmitSignaturePayload,
     onSuccess?: () => void
   ) => {
