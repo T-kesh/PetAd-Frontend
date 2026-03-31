@@ -5,15 +5,16 @@ import tailwindcss from "@tailwindcss/vite";
 // https://vite.dev/config/
 export default defineConfig({
   server: {
-      host: "::",
-      port: 5173,
-      open: true,
-    },
-  plugins: [react(), tailwindcss()],
-  server: {
+    host: "localhost",
     port: 4321,
     strictPort: true,
+    hmr: {
+      host: "localhost",
+      port: 4321,
+      protocol: "ws",
+    },
   },
+  plugins: [react(), tailwindcss()],
   test: {
     environment: "jsdom",
     globals: true,
