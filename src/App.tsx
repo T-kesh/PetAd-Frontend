@@ -55,10 +55,14 @@ function App() {
           path="/adoption/:adoptionId/timeline"
           element={<AdoptionTimelinePage />}
         />
+
+        {/* Admin Approvals */}
         <Route
           path="/admin/approvals"
           element={<AdminApprovalQueuePage />}
         />
+
+        {/* Custody Routes */}
         <Route
           path="/custody/:custodyId/timeline"
           element={<CustodyTimelinePage />}
